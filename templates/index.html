@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Waste Disposal Guide</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Smart Waste Disposal</h1>
+        <p>Describe your waste item and get proper disposal instructions</p>
+        
+        <form id="wasteForm">
+            <div class="form-group">
+                <label for="wasteDescription">Describe your waste item*:</label>
+                <textarea id="wasteDescription" required 
+                    placeholder="e.g., 'An old laptop battery that's swollen' or 'Broken glass bottles from a party'"></textarea>
+            </div>
+            
+            <button type="submit">Analyze Waste</button>
+        </form>
+        
+        <div id="loading" class="hidden">
+            <div class="spinner"></div>
+            <p>Analyzing your waste item...</p>
+        </div>
+        
+        <div id="results" class="hidden">
+            <h2>Analysis Results</h2>
+            <div class="result-section">
+                <h3>Classification:</h3>
+                <p id="classification"></p>
+            </div>
+            <div class="result-section">
+                <h3>Disposal Methods:</h3>
+                <ul id="disposalMethods"></ul>
+            </div>
+            <div class="result-section">
+                <h3>Safety Precautions:</h3>
+                <ul id="safetyPrecautions"></ul>
+            </div>
+            <div class="result-section">
+                <h3>Recycling Options:</h3>
+                <ul id="recyclingOptions"></ul>
+            </div>
+        </div>
+        
+        <div id="error" class="hidden">
+            <p class="error-message"></p>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('wasteForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const wasteDescription = document.getElementById('wasteDescription').value.trim();
+            
+            if (!wasteDescription) {
+                showError('Please describe your waste item');
+                return;
+            }
+            
+            // Show loading, hide results and error
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('results').classList.add('hidden');
+            document.getElementById('error').classList.add('hidden');
+            
+            try {
+                const response = await fetch('/api/analyze-waste', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        waste_description: wasteDescription
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    displayResults(data);
+                    document.getElementById('results').classList.remove('hidden');
+                } else {
+                    throw new Error(data.error || 'Failed to analyze waste');
+                }
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                document.getElementById('loading').classList.add('hidden');
+            }
+        });
+
+        function displayResults(data) {
+            try {
+                {
+    document.getElementById('classification').textContent = data.classification;
+    document.getElementById('disposalMethods').innerHTML = data.disposal_methods.map(m => `<li>${m}</li>`).join('');
+    document.getElementById('safetyPrecautions').innerHTML = data.safety_precautions.map(s => `<li>${s}</li>`).join('');
+    document.getElementById('recyclingOptions').innerHTML = data.recycling_options.map(r => `<li>${r}</li>`).join('');
+}
+            } catch (e) {
+                showError('Failed to parse response from server');
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.querySelector('.error-message').textContent = message;
+            errorDiv.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
