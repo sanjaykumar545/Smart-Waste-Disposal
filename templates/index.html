@@ -8,46 +8,65 @@
 </head>
 <body>
     <div class="container">
-        <h1>Smart Waste Disposal</h1>
-        <p>Describe your waste item and get proper disposal instructions</p>
-        
-        <form id="wasteForm">
-            <div class="form-group">
-                <label for="wasteDescription">Describe your waste item*:</label>
-                <textarea id="wasteDescription" required 
-                    placeholder="e.g., 'An old laptop battery that's swollen' or 'Broken glass bottles from a party'"></textarea>
+        <div class="main-card">
+            <div class="header">
+                <div class="logo-container">
+                    <div class="logo">🌱</div>
+                </div>
+                <h1>Smart Waste Disposal</h1>
+                <p class="subtitle">Transform waste into wisdom with AI-powered disposal guidance</p>
             </div>
             
-            <button type="submit">Analyze Waste</button>
-        </form>
-        
-        <div id="loading" class="hidden">
-            <div class="spinner"></div>
-            <p>Analyzing your waste item...</p>
-        </div>
-        
-        <div id="results" class="hidden">
-            <h2>Analysis Results</h2>
-            <div class="result-section">
-                <h3>Classification:</h3>
-                <p id="classification"></p>
+            <div class="form-section">
+                <form id="wasteForm">
+                    <div class="form-group">
+                        <label for="wasteDescription">Describe your waste item*:</label>
+                        <div class="input-container">
+                            <textarea id="wasteDescription" required 
+                                placeholder="e.g., 'An old laptop battery that's swollen' or 'Broken glass bottles from a party'"></textarea>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">🔍 Analyze Waste</button>
+                </form>
             </div>
-            <div class="result-section">
-                <h3>Disposal Methods:</h3>
-                <ul id="disposalMethods"></ul>
+            
+            <div id="loading" class="hidden">
+                <div class="loading-section">
+                    <div class="spinner-container">
+                        <div class="spinner"></div>
+                    </div>
+                    <p class="loading-text">Analyzing your waste item...</p>
+                </div>
             </div>
-            <div class="result-section">
-                <h3>Safety Precautions:</h3>
-                <ul id="safetyPrecautions"></ul>
+            
+            <div id="results" class="hidden">
+                <div class="results-section">
+                    <h2 class="results-title">✨ Analysis Results</h2>
+                    <div class="result-card classification">
+                        <h3><div class="icon">🏷️</div>Classification</h3>
+                        <p id="classification"></p>
+                    </div>
+                    <div class="result-card disposal">
+                        <h3><div class="icon">🗑️</div>Disposal Methods</h3>
+                        <ul id="disposalMethods"></ul>
+                    </div>
+                    <div class="result-card safety">
+                        <h3><div class="icon">⚠️</div>Safety Precautions</h3>
+                        <ul id="safetyPrecautions"></ul>
+                    </div>
+                    <div class="result-card recycling">
+                        <h3><div class="icon">♻️</div>Recycling Options</h3>
+                        <ul id="recyclingOptions"></ul>
+                    </div>
+                </div>
             </div>
-            <div class="result-section">
-                <h3>Recycling Options:</h3>
-                <ul id="recyclingOptions"></ul>
+            
+            <div id="error" class="hidden">
+                <div class="error-section">
+                    <p class="error-message"></p>
+                </div>
             </div>
-        </div>
-        
-        <div id="error" class="hidden">
-            <p class="error-message"></p>
         </div>
     </div>
     
@@ -83,6 +102,13 @@
                 if (response.ok) {
                     displayResults(data);
                     document.getElementById('results').classList.remove('hidden');
+                    // Smooth scroll to results section
+                    setTimeout(() => {
+                        document.getElementById('results').scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }, 100);
                 } else {
                     throw new Error(data.error || 'Failed to analyze waste');
                 }
@@ -95,12 +121,10 @@
 
         function displayResults(data) {
             try {
-                {
-    document.getElementById('classification').textContent = data.classification;
-    document.getElementById('disposalMethods').innerHTML = data.disposal_methods.map(m => `<li>${m}</li>`).join('');
-    document.getElementById('safetyPrecautions').innerHTML = data.safety_precautions.map(s => `<li>${s}</li>`).join('');
-    document.getElementById('recyclingOptions').innerHTML = data.recycling_options.map(r => `<li>${r}</li>`).join('');
-}
+                document.getElementById('classification').textContent = data.classification;
+                document.getElementById('disposalMethods').innerHTML = data.disposal_methods.map(m => `<li>${m}</li>`).join('');
+                document.getElementById('safetyPrecautions').innerHTML = data.safety_precautions.map(s => `<li>${s}</li>`).join('');
+                document.getElementById('recyclingOptions').innerHTML = data.recycling_options.map(r => `<li>${r}</li>`).join('');
             } catch (e) {
                 showError('Failed to parse response from server');
             }
