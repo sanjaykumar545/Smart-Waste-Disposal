@@ -4,137 +4,464 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Waste Disposal Guide</title>
-    <link rel="stylesheet" href="/static/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A, #CDDC39, #FFC107, #FF9800);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: #2E7D32;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        h1 i {
+            color: #4CAF50;
+            margin-right: 15px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+
+        .eco-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #4CAF50, #8BC34A);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .form-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid #e9ecef;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #2E7D32;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        label i {
+            margin-right: 8px;
+            color: #4CAF50;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 120px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        textarea::placeholder {
+            color: #adb5bd;
+            font-style: italic;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn i {
+            margin-right: 10px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border: 1px solid #e9ecef;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e9ecef;
+            border-top: 4px solid #4CAF50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading p {
+            color: #666;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .results {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid #e9ecef;
+        }
+
+        .results h2 {
+            color: #2E7D32;
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .result-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #4CAF50;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .result-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .result-section h3 {
+            color: #2E7D32;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .result-section h3 i {
+            margin-right: 10px;
+            width: 20px;
+            color: #4CAF50;
+        }
+
+        .classification-text {
+            font-size: 1.1rem;
+            color: #495057;
+            font-weight: 500;
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .result-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .result-section li {
+            background: #f8f9fa;
+            margin-bottom: 10px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border-left: 3px solid #4CAF50;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            position: relative;
+            padding-left: 45px;
+        }
+
+        .result-section li::before {
+            content: '✓';
+            position: absolute;
+            left: 15px;
+            color: #4CAF50;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .result-section li:last-child {
+            margin-bottom: 0;
+        }
+
+        .error {
+            background: linear-gradient(135deg, #ffebee, #fce4ec);
+            border: 1px solid #f8bbd9;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .error-message {
+            color: #c62828;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        .error i {
+            color: #d32f2f;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .form-container,
+            .results,
+            .loading {
+                padding: 20px;
+            }
+        }
+
+        /* Color coding for different waste types */
+        .hazardous { border-left-color: #f44336; }
+        .hazardous h3 i { color: #f44336; }
+        .hazardous li::before { content: '⚠️'; }
+
+        .recyclable { border-left-color: #2196F3; }
+        .recyclable h3 i { color: #2196F3; }
+        .recyclable li::before { content: '♻️'; }
+
+        .organic { border-left-color: #8BC34A; }
+        .organic h3 i { color: #8BC34A; }
+        .organic li::before { content: '🌱'; }
+
+        .electronic { border-left-color: #9C27B0; }
+        .electronic h3 i { color: #9C27B0; }
+        .electronic li::before { content: '⚡'; }
+    </style>
 </head>
 <body>
     <div class="container">
-        <div class="main-card">
-            <div class="header">
-                <div class="logo-container">
-                    <div class="logo">🌱</div>
+        <div class="header">
+            <h1><i class="fas fa-recycle"></i>Smart Waste Disposal</h1>
+            <p class="subtitle">Describe your waste item and get proper disposal instructions</p>
+            <div class="eco-badge">
+                <i class="fas fa-leaf"></i> Eco-Friendly Solutions
+            </div>
+        </div>
+        
+        <form id="wasteForm">
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="wasteDescription">
+                        <i class="fas fa-edit"></i>Describe your waste item*:
+                    </label>
+                    <textarea id="wasteDescription" required 
+                        placeholder="e.g., 'An old laptop battery that's swollen' or 'Broken glass bottles from a party'"></textarea>
                 </div>
-                <h1>Smart Waste Disposal</h1>
-                <p class="subtitle">Transform waste into wisdom with AI-powered disposal guidance</p>
+                
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-search"></i>Analyze Waste
+                </button>
+            </div>
+        </form>
+        
+        <div id="loading" class="loading hidden">
+            <div class="spinner"></div>
+            <p><i class="fas fa-cog fa-spin"></i> Analyzing your waste item...</p>
+        </div>
+        
+        <div id="results" class="results hidden">
+            <h2><i class="fas fa-clipboard-list"></i> Analysis Results</h2>
+            
+            <div class="result-section">
+                <h3><i class="fas fa-tags"></i>Classification</h3>
+                <div id="classification" class="classification-text"></div>
             </div>
             
-            <div class="form-section">
-                <form id="wasteForm">
-                    <div class="form-group">
-                        <label for="wasteDescription">Describe your waste item*:</label>
-                        <div class="input-container">
-                            <textarea id="wasteDescription" required 
-                                placeholder="e.g., 'An old laptop battery that's swollen' or 'Broken glass bottles from a party'"></textarea>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="submit-btn">🔍 Analyze Waste</button>
-                </form>
+            <div class="result-section">
+                <h3><i class="fas fa-trash-alt"></i>Disposal Methods</h3>
+                <ul id="disposalMethods"></ul>
             </div>
             
-            <div id="loading" class="hidden">
-                <div class="loading-section">
-                    <div class="spinner-container">
-                        <div class="spinner"></div>
-                    </div>
-                    <p class="loading-text">Analyzing your waste item...</p>
-                </div>
+            <div class="result-section">
+                <h3><i class="fas fa-shield-alt"></i>Safety Precautions</h3>
+                <ul id="safetyPrecautions"></ul>
             </div>
             
-            <div id="results" class="hidden">
-                <div class="results-section">
-                    <h2 class="results-title">✨ Analysis Results</h2>
-                    <div class="result-card classification">
-                        <h3><div class="icon">🏷️</div>Classification</h3>
-                        <p id="classification"></p>
-                    </div>
-                    <div class="result-card disposal">
-                        <h3><div class="icon">🗑️</div>Disposal Methods</h3>
-                        <ul id="disposalMethods"></ul>
-                    </div>
-                    <div class="result-card safety">
-                        <h3><div class="icon">⚠️</div>Safety Precautions</h3>
-                        <ul id="safetyPrecautions"></ul>
-                    </div>
-                    <div class="result-card recycling">
-                        <h3><div class="icon">♻️</div>Recycling Options</h3>
-                        <ul id="recyclingOptions"></ul>
-                    </div>
-                </div>
+            <div class="result-section">
+                <h3><i class="fas fa-recycle"></i>Recycling Options</h3>
+                <ul id="recyclingOptions"></ul>
             </div>
-            
-            <div id="error" class="hidden">
-                <div class="error-section">
-                    <p class="error-message"></p>
-                </div>
-            </div>
+        </div>
+        
+        <div id="error" class="error hidden">
+            <i class="fas fa-exclamation-triangle"></i>
+            <p class="error-message"></p>
         </div>
     </div>
     
-    <script>
-        document.getElementById('wasteForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const wasteDescription = document.getElementById('wasteDescription').value.trim();
-            
-            if (!wasteDescription) {
-                showError('Please describe your waste item');
-                return;
-            }
-            
-            // Show loading, hide results and error
-            document.getElementById('loading').classList.remove('hidden');
-            document.getElementById('results').classList.add('hidden');
-            document.getElementById('error').classList.add('hidden');
-            
-            try {
-                const response = await fetch('/api/analyze-waste', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        waste_description: wasteDescription
-                    })
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok) {
-                    displayResults(data);
-                    document.getElementById('results').classList.remove('hidden');
-                    // Smooth scroll to results section
-                    setTimeout(() => {
-                        document.getElementById('results').scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }, 100);
-                } else {
-                    throw new Error(data.error || 'Failed to analyze waste');
-                }
-            } catch (error) {
-                showError(error.message);
-            } finally {
-                document.getElementById('loading').classList.add('hidden');
-            }
+   <script>
+document.getElementById('wasteForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const wasteDescription = document.getElementById('wasteDescription').value.trim();
+    
+    if (!wasteDescription) {
+        showError('Please describe your waste item');
+        return;
+    }
+    
+    // Show loading, hide results and error
+    document.getElementById('loading').classList.remove('hidden');
+    document.getElementById('results').classList.add('hidden');
+    document.getElementById('error').classList.add('hidden');
+    
+    try {
+        const response = await fetch('http://127.0.0.1:5000/api/analyze-waste', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ waste_description: wasteDescription })
         });
-
-        function displayResults(data) {
-            try {
-                document.getElementById('classification').textContent = data.classification;
-                document.getElementById('disposalMethods').innerHTML = data.disposal_methods.map(m => `<li>${m}</li>`).join('');
-                document.getElementById('safetyPrecautions').innerHTML = data.safety_precautions.map(s => `<li>${s}</li>`).join('');
-                document.getElementById('recyclingOptions').innerHTML = data.recycling_options.map(r => `<li>${r}</li>`).join('');
-            } catch (e) {
-                showError('Failed to parse response from server');
-            }
+        
+        const data = await response.json();
+        
+        if (response.ok && data.waste_items) {
+            displayResults(data.waste_items);
+            document.getElementById('results').classList.remove('hidden');
+        } else {
+            throw new Error(data.error || 'Failed to analyze waste');
         }
+    } catch (error) {
+        showError(error.message);
+    } finally {
+        document.getElementById('loading').classList.add('hidden');
+    }
+});
 
-        function showError(message) {
-            const errorDiv = document.getElementById('error');
-            errorDiv.querySelector('.error-message').textContent = message;
-            errorDiv.classList.remove('hidden');
-        }
-    </script>
+function displayResults(items) {
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = "<h2>Analysis Results</h2>";
+
+    items.forEach(item => {
+        const section = document.createElement("div");
+        section.classList.add("result-section");
+        section.innerHTML = `
+            <h3>🗑️ ${item.item}</h3>
+            <p><strong>Classification:</strong> ${item.classification}</p>
+            <p><strong>Sub-classification:</strong> ${item.sub_classification?.join(", ") || "N/A"}</p>
+            
+            <h4>Disposal Methods:</h4>
+            <ul>${item.disposal_methods.map(m => `<li>${m}</li>`).join('')}</ul>
+
+            <h4>Safety Precautions:</h4>
+            <ul>${item.safety_precautions.map(s => `<li>${s}</li>`).join('')}</ul>
+
+            <h4>Recycling Options:</h4>
+            <ul>${item.recycling_options.map(r => `<li>${r}</li>`).join('')}</ul>
+
+            <h4>Clarification Needed:</h4>
+            <p>${item.clarification_needed || "None"}</p>
+        `;
+        resultsDiv.appendChild(section);
+    });
+}
+
+function showError(message) {
+    const errorDiv = document.getElementById('error');
+    errorDiv.querySelector('.error-message').textContent = message;
+    errorDiv.classList.remove('hidden');
+}
+</script>
+
 </body>
 </html>

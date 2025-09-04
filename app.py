@@ -37,15 +37,44 @@ def get_waste_disposal_info(waste_description):
         time.sleep(REQUEST_INTERVAL - (current_time - last_request_time))
     last_request_time = time.time()
     
-    prompt = f"""Analyze this waste description and provide response in exact JSON format:
-    {{
-        "classification": "category_name",
-        "disposal_methods": ["method1", "method2"],
-        "safety_precautions": ["precaution1", "precaution2"],
-        "recycling_options": ["option1", "option2"]
-    }}
-    
-    Waste description: {waste_description}
+    prompt = f"""You are an intelligent waste management assistant. 
+The user may provide a single waste item or multiple items separated by commas/spaces.  
+For **each item separately**, classify it and provide multiple safe, eco-friendly, advanced, and legal disposal methods.  
+
+Return the result in valid JSON only, with this structure:  
+
+{{
+    "waste_items": [
+        {{
+            "item": "name of the waste item",
+            "classification": "broad_category",
+            "sub_classification": ["possible_sub_categories_if_any"],
+            "disposal_methods": [
+                "method1 - short explanation",
+                "method2 - short explanation",
+                "innovative/advanced method - short explanation"
+            ],
+            "safety_precautions": [
+                "precaution1",
+                "precaution2"
+            ],
+            "recycling_options": [
+                "option1",
+                "option2"
+            ],
+            "clarification_needed": "Question to ask user if item description is vague"
+        }}
+    ]
+}}
+
+Guidelines:
+- If multiple items are given, repeat this structure for each one inside "waste_items".
+- Always return all possible solutions, not just one.
+- Prefer advanced and sustainable solutions.
+- If an item is unclear, add a clarifying question in "clarification_needed".
+- Respond ONLY with valid JSON, no extra text or markdown.
+
+Waste description: {waste_description}
     
     Important:
     - Respond ONLY with valid JSON
